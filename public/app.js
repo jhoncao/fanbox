@@ -3485,10 +3485,12 @@ const term = {
         // Ctrl+V 透传原始 ^V(0x16) 给 PTY（iTerm2 同款）：claude code 等 TUI 靠收到 ^V
         // 才去读系统剪贴板取图，拦掉它图片粘贴就死了；mac 上 Ctrl+V 本来也不是粘贴键
         if (!e.metaKey) return true;
-        // ⌘V 粘贴
+        // ⌘V 粘贴：有文本贴文本；无文本（如截图在剪贴板）送 ^V 给 PTY，
+        // 让 claude code 自己去读剪贴板取图——⌘V 一个键统一文本和图片粘贴
         e.preventDefault();
         navigator.clipboard.readText().then(text => {
           if (text) xterm.paste(text);
+          else this.input(id, '\x16');
         }).catch(() => { /* 无权限时走Electron菜单兜底 */ });
         return false;
       }
