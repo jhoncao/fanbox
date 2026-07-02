@@ -3482,6 +3482,9 @@ const term = {
         return true;
       }
       if (cmd && (e.key === 'v' || e.key === 'V')) {
+        // Ctrl+V 透传原始 ^V(0x16) 给 PTY（iTerm2 同款）：claude code 等 TUI 靠收到 ^V
+        // 才去读系统剪贴板取图，拦掉它图片粘贴就死了；mac 上 Ctrl+V 本来也不是粘贴键
+        if (!e.metaKey) return true;
         // ⌘V 粘贴
         e.preventDefault();
         navigator.clipboard.readText().then(text => {
