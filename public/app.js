@@ -2413,7 +2413,7 @@ function truncNote() {
 
 // ---------- 命令面板 ----------
 const cmdk = {
-  results: [], active: 0, timer: null, scopeAll: true, contentMode: false,
+  results: [], active: 0, timer: null, scopeAll: false, contentMode: true, // 默认：当前目录 + 全文搜索
   open() {
     $('#cmdk').classList.remove('hidden');
     this.updateScopeLabel();
